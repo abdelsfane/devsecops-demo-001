@@ -107,7 +107,7 @@ node {
       }
       
       // Upload our application jar file to Artifactory
-      stage("Upload to Artifactory & Run Security Scan") {
+      stage("Upload to Artifactory") {
         script{
           CHECKSUM = sh(script: '''
           cd ~/$PROJECT_NAME/${SPRING_APP}/build/libs
@@ -121,6 +121,14 @@ node {
             file=`ls *.jar`
             cp ${file} ${WORKSPACE}/$PROJECT_NAME/pcf_artifacts && cd ../reports
             curl -s -u${ART_USERNAME}:${ART_PASSWORD} -T bom.xml ${ARTIFACT_URL}bom.xml
+             cd ${WORKSPACE}/$PROJECT_NAME
+            chmod +x dependencytrack_post.sh
+            ./dependencytrack_post.sh
+        '''
+      }
+      stage("Run Security Scan") {
+        sh '''
+            cd ${WORKSPACE}/$PROJECT_NAME
             chmod +x dependencytrack_post.sh
             ./dependencytrack_post.sh
         '''
