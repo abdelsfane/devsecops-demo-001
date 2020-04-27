@@ -120,6 +120,7 @@ node {
             cd ${WORKSPACE}/$PROJECT_NAME/${SPRING_APP}/build/libs
             file=`ls *.jar`
             cp ${file} ${WORKSPACE}/$PROJECT_NAME/pcf_artifacts && cd ../reports
+            cp bom.xml ${WORKSPACE}/$PROJECT_NAME
             curl -s -u${ART_USERNAME}:${ART_PASSWORD} -T bom.xml ${ARTIFACT_URL}bom.xml
         '''
       }
