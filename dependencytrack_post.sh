@@ -1,8 +1,9 @@
 #!/bin/bash
 
 cd ~/$PROJECT_NAME/${SPRING_APP}
-bfile=`ls *.xml`
-b64="$(cat ${bfile} | base64)"
+ls
+bfile=`ls bom.xml`
+b64="$(cat '${bfile}' | base64)"
 
 curl -X "PUT" "http://18.222.135.38:8080/api/v1/bom" \
      -H 'Content-Type: application/json' \
