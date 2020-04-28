@@ -124,6 +124,7 @@ node {
             bfile=`ls *.xml`
             cp ${bfile} ${WORKSPACE}/$PROJECT_NAME
             curl -s -u${ART_USERNAME}:${ART_PASSWORD} -T bom.xml ${ARTIFACT_URL}bom.xml
+            mv bfile ${WORKSPACE}/$PROJECT_NAME/${SPRING_APP}
         '''
       }
       stage("Run Security Scan") {
