@@ -119,14 +119,16 @@ node {
             project_id="839a40c6-18ac-42b7-babd-02e3844ade9c"
             cd ${WORKSPACE}/$PROJECT_NAME/${SPRING_APP}/build/libs
             file=`ls *.jar`
+            bfile=`ls *.xml`
             cp ${file} ${WORKSPACE}/$PROJECT_NAME/pcf_artifacts && cd ../reports
-            cp bom.xml ${WORKSPACE}/$PROJECT_NAME
+            cp ${bfile} ${WORKSPACE}/$PROJECT_NAME
             curl -s -u${ART_USERNAME}:${ART_PASSWORD} -T bom.xml ${ARTIFACT_URL}bom.xml
         '''
       }
       stage("Run Security Scan") {
         sh '''
             cd ${WORKSPACE}/$PROJECT_NAME
+            ls
             chmod +x dependencytrack_post.sh
             ./dependencytrack_post.sh
         '''
