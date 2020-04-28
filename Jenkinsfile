@@ -12,6 +12,7 @@ node {
 
   // ------------------------------- Define Variables ------------------------------------------------
     SPRING_APP = "spring-music-app"
+    project_id = "839a40c6-18ac-42b7-babd-02e3844ade9c"
     APPLICATION_NAME = "${BUILD_USER_ID}-${SPRING_APP}"
     // PCF_ENV = "preproduction"
     // PCF_ORG = "security_lab"
@@ -62,6 +63,7 @@ node {
         // env.PCF_ENV = PCF_ENV
         // env.PCF_SPACE = PCF_SPACE
         // env.PCF_ORG = PCF_ORG
+        env.project_id = project_id
         env.SPRING_APP = SPRING_APP
         env.SONARQUBE_ENDPOINT = SONARQUBE_ENDPOINT
         env.SONARQUBE_TOKEN = SONARQUBE_TOKEN
@@ -116,11 +118,10 @@ node {
           ''', returnStdout: true).trim()
         }
         sh '''
-            project_id="839a40c6-18ac-42b7-babd-02e3844ade9c"
             cd ${WORKSPACE}/$PROJECT_NAME/${SPRING_APP}/build/libs
             file=`ls *.jar`
-            bfile=`ls *.xml`
             cp ${file} ${WORKSPACE}/$PROJECT_NAME/pcf_artifacts && cd ../reports
+            bfile=`ls *.xml`
             cp ${bfile} ${WORKSPACE}/$PROJECT_NAME
             curl -s -u${ART_USERNAME}:${ART_PASSWORD} -T bom.xml ${ARTIFACT_URL}bom.xml
         '''
@@ -128,7 +129,6 @@ node {
       stage("Run Security Scan") {
         sh '''
             cd ${WORKSPACE}/$PROJECT_NAME
-            ls
             chmod +x dependencytrack_post.sh
             ./dependencytrack_post.sh
         '''
